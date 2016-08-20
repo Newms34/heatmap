@@ -1,0 +1,30 @@
+{
+  "name": "Daves Maze Game",
+  "description": "A dungeon crawler written with MEAN.io and love!",
+  "main": "app.js",
+  "authors": [
+    "David Newman"
+  ],
+  "license": "ISC",
+  "keywords": [
+    "heat map app"
+  ],
+  "homepage": "https://github.com/Newms34/mazegame",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.5.x",
+    "bootstrap": "^3.3.6",
+    "jquery-ui": "^1.11.4",
+    "bootbox.js": "bootbox#^4.4.0"
+  },
+  "resolutions": {
+    "angular": "1.5.7"
+  }
+}

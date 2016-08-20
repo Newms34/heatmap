@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Heat Map!</title>
+    <link rel="stylesheet" href="/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
+</head>
+
+<body ng-app='heatApp' ng-controller='heat-con'>
+    <div id='field'>
+        <div class='cell-row' ng-repeat='r in cells'>
+            <div class='cell' ng-repeat='c in r' style='background:{{getCol(c.col)}};box-shadow:inset 0 0 3px {{getCol(c.col,true)}}'>&nbsp;</div>
+        </div>
+    </div>
+    <script src="/jquery/dist/jquery.min.js"></script>
+    <script src="/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/angular/angular.min.js"></script>
+    <script src="/bootbox.js/bootbox.js"></script>
+    <script src="/js/all.min.js"></script>
+</body>
+
+</html>
