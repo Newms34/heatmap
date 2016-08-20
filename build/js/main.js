@@ -4,6 +4,7 @@ app.controller('heat-con', function($scope, $http, $q) {
     $scope.w = 0;
     $scope.h = 0;
     $scope.cells = [];
+    var fld = $('#field')
     $scope.cell = function(y, x, col) {
         this.x = x;
         this.y = y;
@@ -30,30 +31,33 @@ app.controller('heat-con', function($scope, $http, $q) {
     }
     $scope.heating = false;
     $scope.heatTarg = null;
-    $scope.cellheats=function(){
-        for (var y=0;y<$scope.cells.length;y++){
-            for (var x=0;x<$scope.cells.length;x++){
-                var highestTemp = $scope.cells[y][x].col;//hottest cell defaults to this cell
-                var hotCell = [y,x];
+    $scope.cellheats = function() {
+        for (var y = 0; y < $scope.cells.length; y++) {
+            for (var x = 0; x < $scope.cells.length; x++) {
+                var highestTemp = $scope.cells[y][x].col; //hottest cell defaults to this cell
+                var hotCell = [y, x];
                 //now we find the hottest neighboring cell;
-                for(var dy = -1;dy<2;dy++){
-                    for(var dx = -1;dx<2;dx++){
-                        if($scope.cells[dy+y] && $scope.cells[dy+y][dx+x] && $scope.cells[dy+y][dx+x].col>highestTemp){
+                for (var dy = -1; dy < 2; dy++) {
+                    for (var dx = -1; dx < 2; dx++) {
+                        if ($scope.cells[dy + y] && $scope.cells[dy + y][dx + x] && $scope.cells[dy + y][dx + x].col > highestTemp) {
                             //cell exists!
-                            highestTemp = $scope.cells[dy+y][dx+x].col;
-                            hotCell = [dy+y,dx+x];
+                            highestTemp = $scope.cells[dy + y][dx + x].col;
+                            hotCell = [dy + y, dx + x];
                         }
                     }
                 }
-                if(hotCell[0]==y && hotCell[1]==x && highestTemp<=$scope.cells[y][x].col){
+                if (hotCell[0] == y && hotCell[1] == x && $scope.cells[y][x].col > 0) {
                     //this is the hottest cell!
-                    $scope.cells[y][x].col-=.1;
+                    //no change
+                    $scope.cells[y][x].col -= 0;
+                } else if ($scope.cells[hotCell[0]][hotCell[1]].col > 0 && hotCell[0] != y && hotCell[1] != x) {
+                    console.log("HEATING CELL", hotCell[0], y, hotCell[1], x)
+                        //this is not the hottest cell
+                    $scope.cells[y][x].col += .5;
+                    $scope.cells[hotCell[0]][hotCell[1]].col -= .5;
                 }
-               else{
-                    console.log("HEATING CELL",hotCell[0],y,hotCell[1],x)
-                    //this is not the hottest cell
-                    $scope.cells[y][x].col+=.1;
-                    $scope.cells[hotCell[0]][hotCell[1]].col -=.1;
+                if ($scope.cells[y][x].col < 0) {
+                    $scope.cells[y][x].col == 0;
                 }
             }
         }
@@ -61,23 +65,38 @@ app.controller('heat-con', function($scope, $http, $q) {
     $scope.t = setInterval(function() {
         if ($scope.heating) {
             var pos = $scope.heatTarg.id.split('-');
-            console.log($scope.heatTarg,pos)
+            console.log($scope.heatTarg, pos)
             console.log('Heating cell at', pos, $scope.cells[pos[1]][pos[0]].col)
-            $scope.cells[pos[1]][pos[0]].col < 100 ? $scope.cells[pos[1]][pos[0]].col+=5 : $scope.cells[pos[1]][pos[0]].col = 100;
+            $scope.cells[pos[1]][pos[0]].col < 100 ? $scope.cells[pos[1]][pos[0]].col += 5 : $scope.cells[pos[1]][pos[0]].col = 100;
+            for (var dy = -1; dy < 2; dy++) {
+                for (var dx = -1; dx < 2; dx++) {
+                    if ($scope.cells[pos[1]+dy] && $scope.cells[pos[1]+dy][pos[0]+dx]){
+                        $scope.cells[pos[1]+dy][pos[0]+dx]+2;
+                    }
+                }
+            }
         }
         $scope.cellheats();
         $scope.$digest();
     }, 50);
-    window.onmousedown = function(e) {
-        if (e.button == 0 && document.elementFromPoint((e.x || e.clientX), (e.y || e.clientY)).className.indexOf('cell') != -1) {
+    fld.on('click', function(e) {
+        if (!$scope.heating && e.button == 0 && document.elementFromPoint((e.x || e.clientX), (e.y || e.clientY)).className.indexOf('cell') != -1) {
             $scope.heating = true;
-            $scope.heatTarg = document.elementFromPoint(e.x, e.y);
-        }
-    }
-    window.onmouseup = function(e) {
-        if (e.button == 0) {
+            $scope.heatTarg = document.elementFromPoint((e.x || e.clientX));
+        } else {
             $scope.heating = false;
             $scope.heatTarg = null;
         }
+    });
+    fld.on('mousemove', function(e) {
+        if (document.elementFromPoint((e.x || e.clientX), (e.y || e.clientY)).className.indexOf('cell') != -1) {
+            $scope.heatTarg = document.elementFromPoint((e.x || e.clientX), (e.y || e.clientY));
+        }
+    });
+    $scope.floor = function(n) {
+        return Math.floor(n);
+    }
+    $scope.getRHeight = function(n) {
+        return $('#row' + n).height();
     }
 });

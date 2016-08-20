@@ -7,7 +7,14 @@ body {
   transform-style: preserve-3d; }
 
 .cell {
-  display: inline-block; }
+  display: inline-block;
+  overflow: hidden;
+  position: relative;
+  left: 0;
+  top: 0; }
 
 .cell-row {
-  display: block; }
+  display: block;
+  width: 500px;
+  margin: 0;
+  padding: 0; }

@@ -8,7 +8,14 @@ body {
 }
 .cell{
     display:inline-block;
+    overflow:hidden;
+    position:relative;
+    left:0;
+    top:0;
 }
 .cell-row{
     display:block;
+    width:500px;
+    margin:0;
+    padding:0;
 }

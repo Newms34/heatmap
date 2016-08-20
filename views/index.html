@@ -9,8 +9,8 @@
 
 <body ng-app='heatApp' ng-controller='heat-con'>
     <div id='field'>
-        <div class='cell-row' ng-repeat='r in cells'>
-            <div class='cell' ng-repeat='c in r track by $index' id='{{c.x}}-{{c.y}}' style='box-shadow:inset 0 0 1px #fff;background:{{getCol(c.col)}};width:{{500/w}}px;height:{{500/h}}px;'>{{c.col}}</div>
+        <div class='cell-row' ng-repeat='r in cells' id='row{{$index}}' style='margin:-{{getRHeight($index)-floor(500/h)}}px;'>
+            <div class='cell' ng-repeat='c in r track by $index' id='{{c.x}}-{{c.y}}' style='box-shadow:0 0 {{.5*floor(500/w)*c.col/100}}px {{.5*floor(500/w)*c.col/100}}px {{getCol(c.col)}};background:{{getCol(c.col)}};width:{{floor(500/w)}}px;height:{{floor(500/h)}}px;'></div>
         </div>
     </div>
     <script src="/jquery/dist/jquery.min.js"></script>
